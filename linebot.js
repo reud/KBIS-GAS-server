@@ -1,14 +1,14 @@
 var ACCESS_TOKEN = PropertiesService.getScriptProperties().getProperty('ACCESS_TOKEN');
-var SEARCH_LINES = 200;
+var SEARCH_LINES = 300;
 
-function linebot(e) { 
+function linebot(e) {
   // WebHookで受信した応答用Token
   var ev = JSON.parse(e.postData.contents).events[0];
   var replyToken = JSON.parse(e.postData.contents).events[0].replyToken;
   // ユーザーのメッセージを取得
   var userMessage = JSON.parse(e.postData.contents).events[0].message.text;
   return checkStatus(ev);
-  
+
 }
 
 function textReader(ev) {
@@ -23,17 +23,17 @@ function textReader(ev) {
   } else if (txt == "id") {
     return txtReplyer(ev.replyToken,ev.source.userId);
   } else if (txt == "group_check") {
-    return txtReplyer(ev.replyToken,getGroupMessage()); 
+    return txtReplyer(ev.replyToken,getGroupMessage());
   } else if (txt == "register") {
     writeStatus(ev,"register");
-    return txtReplyer(ev.replyToken,"登録モードに移行します。 \n あなたの名前を<苗字 名前>の形で入れてください。 例:\n法政 太郎"); 
+    return txtReplyer(ev.replyToken,"登録モードに移行します。 \n あなたの名前を<苗字 名前>の形で入れてください。 例:\n法政 太郎");
   }
   return txtReplyer(ev.replyToken,"Hello");
 }
 
 function txtReplyer(replyToken,message) {
   var url = 'https://api.line.me/v2/bot/message/reply';
-  
+
   UrlFetchApp.fetch(url, {
     'headers': {
       'Content-Type': 'application/json; charset=UTF-8',
@@ -58,6 +58,5 @@ function nameSearcher(ev) {
     if (ev.source.userId == sheet.getRange(line,2).getValue()){
       return sheet.getRange(line,1).getValue()
     }
-  } 
+  }
 }
-
